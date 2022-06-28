@@ -6,28 +6,32 @@ class Solution:
         if len(s) < 2:
             return len(s)
         
-        finalStr = ""
-        continuous = []
+        encountered = []
         for c in s:
-            if c not in finalStr:
-                finalStr += c
+            maxSoFar = len(encountered)
+            
+            if c not in encountered:
+                encountered.append(c)
             else:
-                continuous.append(len(finalStr))
-                finalStr = c
-            #print(finalStr)
-                
-        #print(continuous)
-        continuous.append(len(finalStr))
-        return max([1, max(continuous or [0])])
+                nextMax = self.lengthOfLongestSubstring(s[1:])
+                if maxSoFar > nextMax:
+                    return maxSoFar
+                return nextMax
+        
+        return len(encountered)
 
-sol = Solution()
-print(sol.lengthOfLongestSubstring("abcabcbb")) # 3
-print("-------------")
-print(sol.lengthOfLongestSubstring("bbbbb"))    # 1
-print("-------------")
-print(sol.lengthOfLongestSubstring("pwwkew"))   # 3
-print("-------------")
-print(sol.lengthOfLongestSubstring("au"))   # 2
-print("-------------")
-print(sol.lengthOfLongestSubstring("aab"))   # 2
-print("-------------")
+def test(string: str, exp: int):
+    sol = Solution()
+    res = sol.lengthOfLongestSubstring(string)
+    assert res == exp, f"Is {res}, should be {exp}"
+    
+def tests():
+    test("abcabcbb", 3)
+    test("bbbbb", 1)
+    test("pwwkew", 3)
+    test("au", 2)
+    test("aab", 2)
+    test("dvdf", 3)
+    print("All tests passed!")
+    
+tests()
